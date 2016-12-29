@@ -14,6 +14,7 @@ public final class Jsync {
     private static final ExecutorService PARALLEL_EXECUTOR = Executors.newCachedThreadPool();
 
     private static final Parallel parallel = new Parallel(PARALLEL_EXECUTOR, DEFAULT_TIMEOUT_SECONDS);
+    private static final ForEach forEach = new ForEach(parallel);
 
     public static Map<Runnable, Throwable> parallel(Runnable... commands) {
         return parallel.invoke(commands);
@@ -21,5 +22,13 @@ public final class Jsync {
 
     public static Map<Runnable, Throwable> parallel(Collection<Runnable> commands) {
         return parallel.invoke(commands);
+    }
+
+    public static <T> Map<T, Throwable> forEach(T[] items, Consumer<T> consumer) {
+        return forEach.invoke(items, consumer);
+    }
+
+    public static <T> Map<T, Throwable> forEach(Collection<T> items, Consumer<T> consumer) {
+        return forEach.invoke(items, consumer);
     }
 }
