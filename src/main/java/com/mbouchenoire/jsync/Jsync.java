@@ -3,6 +3,8 @@ package com.mbouchenoire.jsync;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -18,20 +20,20 @@ public final class Jsync {
     private static final ForEach FOREACH = new ForEach(PARALLEL);
     private static final Mapper MAPPER = new Mapper(PARALLEL);
 
-    public static Map<Runnable, Throwable> parallel(Runnable... commands) {
+    public static Set<ExecutionException> parallel(Runnable... commands) {
+        return  PARALLEL.invoke(commands);
+    }
+
+    public static Set<ExecutionException> parallel(Collection<Runnable> commands) {
         return PARALLEL.invoke(commands);
     }
 
-    public static Map<Runnable, Throwable> parallel(Collection<Runnable> commands) {
-        return PARALLEL.invoke(commands);
+    public static <T> void forEach(T[] items, Consumer<T> consumer) {
+        FOREACH.invoke(items, consumer);
     }
 
-    public static <T> Map<T, Throwable> forEach(T[] items, Consumer<T> consumer) {
-        return FOREACH.invoke(items, consumer);
-    }
-
-    public static <T> Map<T, Throwable> forEach(Collection<T> items, Consumer<T> consumer) {
-        return FOREACH.invoke(items, consumer);
+    public static <T> void forEach(Collection<T> items, Consumer<T> consumer) {
+        FOREACH.invoke(items, consumer);
     }
 
     public static <T, R> List<R> map(T[] items, Function<T, R> function) {

@@ -68,21 +68,6 @@ public class ForEachTest {
         Jsync.forEach(objects, printConsumer);
     }
 
-    @Test
-    public void arrayOrCollectionShouldProduceSameResult() {
-        final List<Counter> countersCollection = newCounters();
-        Counter[] countersArray = newCounters().toArray(new Counter[newCounters().size()]);
-
-        final Map<Counter, Throwable> collectionErrors = Jsync.forEach(countersCollection, counterErrorConsumer);
-        final Map<Counter, Throwable> arrayErrors = Jsync.forEach(countersArray, counterErrorConsumer);
-
-        assertEquals(collectionErrors.size(), arrayErrors.size());
-
-        for(int i = 0; i < countersCollection.size(); i++) {
-            assertEquals(countersCollection.get(i).getCount(), countersArray[i].getCount());
-        }
-    }
-
     @Test(expected = IllegalArgumentException.class)
     public void nullConsumerShouldThrowException() {
         Jsync.forEach(new ArrayList<Object>(), null);
@@ -110,15 +95,5 @@ public class ForEachTest {
 
         System.out.println("2 * oneSecondSleepConsumer consumed in " + stopWatch.getTime() + " millis");
         assertTrue(stopWatch.getTime() < 2000);
-    }
-
-    @Test
-    public void errorConsumerShouldReturnError() {
-        final List<Counter> counters = newCounters();
-
-        Map<Counter, Throwable> errors = Jsync.forEach(counters, counterErrorConsumer);
-
-        assertEquals(1, errors.size());
-        assertTrue(errors.get(counters.get(0)) instanceof IllegalArgumentException);
     }
 }

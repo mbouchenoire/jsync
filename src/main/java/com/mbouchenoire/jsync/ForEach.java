@@ -20,39 +20,32 @@ class ForEach {
         this.parallel = parallel;
     }
 
-    public <T> Map<T, Throwable> invoke(Collection<T> items, Consumer<T> consumer) {
+    public <T> void invoke(Collection<T> items, Consumer<T> consumer) {
         if (items == null)
             throw new IllegalArgumentException("items");
 
-        return this.invoke((T[])items.toArray(), consumer);
+        this.invoke((T[])items.toArray(), consumer);
     }
 
-    public <T> Map<T, Throwable> invoke(T[] items, Consumer<T> consumer) {
+    public <T> void invoke(T[] items, Consumer<T> consumer) {
         if (items == null)
             throw new IllegalArgumentException("items");
 
         if (consumer == null)
             throw new IllegalArgumentException("consumer");
 
-        final Map<Runnable,  T> runnableItemMap = new ConcurrentHashMap<Runnable, T>(items.length);
+        final Runnable[] runnables = new Runnable[items.length];
 
-        for(T item: items) {
+        for(int i = 0; i < items.length; i++) {
+            final T item = items[i];
+
             if (item == null) {
                 throw new IllegalArgumentException("Cannot consume a null item.");
             }
 
-            final Runnable runnable = new ConsumerRunnableAdapter<T>(consumer, item);
-            runnableItemMap.put(runnable, item);
+            runnables[i] = new ConsumerRunnableAdapter<T>(consumer, item);
         }
 
-        final Map<Runnable, Throwable> parallelErrors = this.parallel.invoke(runnableItemMap.keySet());
-        final Map<T, Throwable> forEachErrors = new ConcurrentHashMap<T, Throwable>(parallelErrors.size());
-
-        for(Runnable errorRunnable: parallelErrors.keySet()) {
-            final T errorItem = runnableItemMap.get(errorRunnable);
-            forEachErrors.put(errorItem, parallelErrors.get(errorRunnable));
-        }
-
-        return forEachErrors;
+        this.parallel.invoke(runnables);
     }
 }

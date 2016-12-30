@@ -25,21 +25,19 @@ class Parallel {
         this.timeoutSeconds = timeoutSeconds;
     }
 
-    public Map<Runnable, Throwable> invoke(Collection<Runnable> commands) {
+    public Set<ExecutionException> invoke(Collection<Runnable> commands) {
         if (commands == null)
             throw new IllegalArgumentException("commands");
 
-        return invoke(commands.toArray(new Runnable[commands.size()]));
+        return this.invoke(commands.toArray(new Runnable[commands.size()]));
     }
 
-    public Map<Runnable, Throwable> invoke(Runnable... commands) {
+    public Set<ExecutionException> invoke(Runnable... commands) {
         if (commands == null)
             throw new IllegalArgumentException("commands");
 
-        final Map<Runnable, Throwable> errors = new ConcurrentHashMap<Runnable, Throwable>(commands.length);
-
         if (commands.length == 0)
-            return errors;
+            return new HashSet<ExecutionException>(0);
 
         final Set<Callable<Runnable>> callables = new HashSet<Callable<Runnable>>();
 
@@ -47,6 +45,8 @@ class Parallel {
             final RunnableCallableAdapter adapter = new RunnableCallableAdapter(runnable);
             callables.add(adapter);
         }
+
+        final Set<ExecutionException> errors = new HashSet<ExecutionException>();
 
         try {
             final List<Future<Runnable>> futures = this.executorService.invokeAll(callables);
@@ -57,11 +57,11 @@ class Parallel {
                 try {
                     future.get(this.timeoutSeconds, TimeUnit.SECONDS);
                 } catch (InterruptedException ie) {
-                    errors.put(commands[futureIndex], ie);
+                    throw new IllegalStateException(ie);
                 } catch (ExecutionException ee) {
-                    errors.put(commands[futureIndex], ee.getCause());
+                    errors.add(ee);
                 } catch (TimeoutException toe) {
-                    errors.put(commands[futureIndex], toe);
+                    throw new IllegalStateException(toe);
                 }
             }
         } catch (InterruptedException ie) {

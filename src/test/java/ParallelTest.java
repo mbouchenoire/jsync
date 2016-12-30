@@ -2,10 +2,8 @@ import com.mbouchenoire.jsync.Jsync;
 import org.apache.commons.lang.time.StopWatch;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -55,23 +53,6 @@ public final class ParallelTest {
     }
 
     @Test
-    public void emptyRunnablesShouldReturnEmptyErrors() {
-        assertEquals(0, Jsync.parallel(new Runnable[0]).size());
-    }
-
-    @Test
-    public void workingRunnableShouldNotReturnError() {
-        assertEquals(0, Jsync.parallel(printRunnable).size());
-    }
-
-    @Test
-    public void errorRunnableShouldReturnError() {
-        Map<Runnable, Throwable> errors = Jsync.parallel(printRunnable, illegalArgumentRunnable);
-        assertEquals(1, errors.size());
-        assertTrue(errors.get(illegalArgumentRunnable) instanceof IllegalArgumentException);
-    }
-
-    @Test
     public void runnablesShouldRunInParallel() {
         final StopWatch stopWatch = new StopWatch();
 
@@ -97,7 +78,7 @@ public final class ParallelTest {
         runnables.add(illegalArgumentRunnable);
         runnables.add(new CounterIncremeterRunnable(counter));
 
-        final Map<Runnable, Throwable> errors = Jsync.parallel(runnables);
+        final Set<ExecutionException> errors = Jsync.parallel(runnables);
 
         assertEquals(3, errors.size());
         assertEquals(4, counter.getCount());
