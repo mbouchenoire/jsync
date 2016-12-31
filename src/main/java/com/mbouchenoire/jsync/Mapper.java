@@ -1,13 +1,13 @@
 package com.mbouchenoire.jsync;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.lang.reflect.Array;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author mbouchenoire
  */
-public class Mapper {
+class Mapper {
 
     private final Parallel parallel;
 
@@ -24,27 +24,38 @@ public class Mapper {
         if (items == null)
             throw new IllegalArgumentException("items");
 
-        return this.map((T[])items.toArray(), function);
+        final R[] mappedItemsArray = this.map((T[])items.toArray(), function);
+
+        return Arrays.asList(mappedItemsArray);
     }
 
-    public <T, R> List<R> map(T[] items, Function<T, R> function) {
+    public <T, R> R[] map(T[] items, Function<T, R> function) {
         if (items == null)
             throw new IllegalArgumentException("items");
 
-        final FunctionRunnableAdapter<T, R>[] functionRunnables = new FunctionRunnableAdapter[items.length];
+        final List<FunctionRunnableAdapter<T, R>> adapters = new ArrayList<FunctionRunnableAdapter<T, R>>(items.length);
 
-        for(int i = 0; i < items.length; i++) {
-            functionRunnables[i] = new FunctionRunnableAdapter<T, R>(function, items[i]);
+        for(T item: items) {
+            final FunctionRunnableAdapter<T, R> functionRunnableAdapter = new FunctionRunnableAdapter<T, R>(function, item);
+            adapters.add(functionRunnableAdapter);
         }
 
-        this.parallel.invoke(functionRunnables);
+        final Runnable[] runnables = adapters.toArray(new Runnable[adapters.size()]);
+        this.parallel.invoke(runnables);
 
-        final List<R> mappedItems = new ArrayList<R>(items.length);
+        R[] mappedItemsArray = null;
 
-        for(int i = 0; i < functionRunnables.length; i++) {
-            mappedItems.add(functionRunnables[i].getRunResult());
+        for(int i = 0; i < adapters.size(); i++) {
+            final FunctionRunnableAdapter<T, R> adapter = adapters.get(i);
+            final R mappedItem = adapter.getRunResult();
+
+            if (mappedItemsArray == null) {
+                mappedItemsArray = (R[])Array.newInstance(mappedItem.getClass(), items.length);
+            }
+
+            mappedItemsArray[i] = mappedItem;
         }
 
-        return mappedItems;
+        return mappedItemsArray;
     }
 }

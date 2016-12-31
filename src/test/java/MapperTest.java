@@ -67,11 +67,11 @@ public class MapperTest {
     public void arrayOrCollectionShouldProduceSameResult() {
         final Counter[] countersArray = new Counter[counters.size()];
 
-        final List<Integer> countsArray = Jsync.map(counters.toArray(countersArray), getCountFunction);
+        final Integer[] countsArray = Jsync.map(counters.toArray(countersArray), getCountFunction);
         final List<Integer> countsList = Jsync.map(counters, getCountFunction);
 
         for(int i = 0; i < countersArray.length; i++) {
-            assertEquals(countsArray.get(i), countsList.get(i));
+            assertEquals(countsArray[i], countsList.get(i));
         }
     }
 

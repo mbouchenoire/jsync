@@ -36,7 +36,7 @@ public final class Jsync {
         FOREACH.invoke(items, consumer);
     }
 
-    public static <T, R> List<R> map(T[] items, Function<T, R> function) {
+    public static <T, R> R[] map(T[] items, Function<T, R> function) {
         return MAPPER.map(items, function);
     }
 
