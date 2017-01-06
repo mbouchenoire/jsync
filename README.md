@@ -11,13 +11,11 @@ public class App {
         
         Jsync.parallel(
             new Runnable() {
-                @Override
                 public void run() {
                     // Do some long task here...
                 }
             },
             new Runnable() {
-                @Override
                 public void run() {
                     // Do some other long task there...
                 }
