@@ -19,6 +19,7 @@ public final class Jsync {
     private static final Parallel PARALLEL = new Parallel(PARALLEL_EXECUTOR, DEFAULT_TIMEOUT_SECONDS);
     private static final ForEach FOREACH = new ForEach(PARALLEL);
     private static final Mapper MAPPER = new Mapper(PARALLEL);
+    private static final Filter FILTER = new Filter(MAPPER);
 
     public static Set<ExecutionException> parallel(Runnable... commands) {
         return  PARALLEL.invoke(commands);
@@ -42,5 +43,13 @@ public final class Jsync {
 
     public static <T, R> List<R> map(List<T> items, Function<T, R> function) {
         return MAPPER.map(items, function);
+    }
+
+    public static <T> T[] filter(T[] items, Predicate<T> predicate) {
+        return FILTER.filter(items, predicate);
+    }
+
+    public static <T> Collection<T> filter(Collection<T> items, Predicate<T> predicate) {
+        return FILTER.filter(items, predicate);
     }
 }
