@@ -23,6 +23,15 @@ public class App {
             new CustomRunnable(args) // or implement your own runnable
         );
         
+        String[] strings = new String[] { "hello" , "world" };
+        
+        Integer[] lengths = Jsync.map(strings, new Function<String, Integer>() {
+           public Integer apply(String arg) {
+               // each execution of this function is asynchronous
+               return arg.length();
+           }
+        });
+        
     }
 }
 ```
