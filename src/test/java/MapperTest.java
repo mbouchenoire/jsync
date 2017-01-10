@@ -72,6 +72,39 @@ public class MapperTest {
     }
 
     @Test
+    public void itemsArrayShouldNotBeMutated() {
+        final String firstString = new String("hi");
+        final String secondString = new String("jsync");
+
+        final String[] strings = new String[] { firstString, secondString };
+        final int stringsLength = strings.length;
+
+        Jsync.map(strings, getLengthFunction);
+
+        assertEquals(stringsLength, strings.length);
+        assertTrue(firstString == strings[0]);
+        assertTrue(secondString == strings[1]);
+    }
+
+    @Test
+    public void itemsCollectionShouldNotBeMutated() {
+        final String firstString = new String("hi");
+        final String secondString = new String("jsync");
+
+        final List<String> strings = new ArrayList<String>(2);
+        strings.add(firstString);
+        strings.add(secondString);
+
+        final int stringsSize = strings.size();
+
+        Jsync.map(strings, getLengthFunction);
+
+        assertEquals(stringsSize, strings.size());
+        assertTrue(firstString == strings.get(0));
+        assertTrue(secondString == strings.get(1));
+    }
+
+    @Test
     public void itemsShouldBeMappedInParallel() {
         final StopWatch stopWatch = new StopWatch();
 

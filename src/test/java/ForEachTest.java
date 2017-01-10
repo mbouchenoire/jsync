@@ -83,6 +83,39 @@ public class ForEachTest {
     }
 
     @Test
+    public void itemsArrayShouldNotBeMutated() {
+        final Counter firstCounter = new Counter(0);
+        final Counter secondCounter = new Counter(1);
+
+        final Counter[] counters = new Counter[] { firstCounter, secondCounter };
+        final int countersLength = counters.length;
+
+        Jsync.forEach(counters, counterIncrementConsumer);
+
+        assertEquals(countersLength, counters.length);
+        assertTrue(firstCounter == counters[0]);
+        assertTrue(secondCounter == counters[1]);
+    }
+
+    @Test
+    public void itemsCollectionShouldNotBeMutated() {
+        final Counter firstCounter = new Counter(0);
+        final Counter secondCounter = new Counter(1);
+
+        final List<Counter> counters = new ArrayList<Counter>(2);
+        counters.add(firstCounter);
+        counters.add(secondCounter);
+
+        final int countersSize = counters.size();
+
+        Jsync.forEach(counters, counterIncrementConsumer);
+
+        assertEquals(countersSize, counters.size());
+        assertTrue(firstCounter == counters.get(0));
+        assertTrue(secondCounter == counters.get(1));
+    }
+
+    @Test
     public void itemsShouldBeConsumedInParallel() {
         final List<Counter> counters = newCounters();
 
