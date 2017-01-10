@@ -33,6 +33,9 @@ class Mapper {
         if (items == null)
             throw new IllegalArgumentException("items");
 
+        if (function == null)
+            throw new IllegalArgumentException("function");
+
         final List<FunctionRunnableAdapter<T, R>> adapters = new ArrayList<FunctionRunnableAdapter<T, R>>(items.length);
 
         for(T item: items) {
