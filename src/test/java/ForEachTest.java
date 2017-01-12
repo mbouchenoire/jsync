@@ -21,37 +21,37 @@ public class ForEachTest {
         }
     };
 
-    private static final Consumer<Counter> oneSecondSleepConsumer = new Consumer<Counter>() {
-        public void accept(Counter c) {
+    private static final Consumer<StringBuilder> oneSecondSleepConsumer = new Consumer<StringBuilder>() {
+        public void accept(StringBuilder arg) {
             try {
                 Thread.sleep(1000);
-                printConsumer.accept(c);
+                printConsumer.accept(arg);
             } catch (InterruptedException ie) {
                 ie.printStackTrace();
             }
         }
     };
 
-    private static final Consumer<Counter> counterIncrementConsumer = new Consumer<Counter>() {
-        public void accept(Counter counter) {
-            counter.increment();
+    private static final Consumer<StringBuilder> stringBuilderReverserConsumer = new Consumer<StringBuilder>() {
+        public void accept(StringBuilder arg) {
+            arg.reverse();
         }
     };
 
-    private static final Consumer<Counter> counterErrorConsumer = new Consumer<Counter>() {
-        public void accept(Counter counter) {
-            if (counter.getCount() == 0) {
-                throw new IllegalArgumentException("0 counter");
+    private static final Consumer<StringBuilder> stringBuilderErrorConsumer = new Consumer<StringBuilder>() {
+        public void accept(StringBuilder arg) {
+            if (arg.length() == 0) {
+                throw new IllegalArgumentException("empty string builder");
             } else {
-                counterIncrementConsumer.accept(counter);
+                stringBuilderReverserConsumer.accept(arg);
             }
         }
     };
 
-    private static final List<Counter> newCounters() {
-        final List<Counter> counters = new ArrayList<Counter>(2);
-        counters.add(new Counter(0));
-        counters.add(new Counter(1));
+    private static final List<StringBuilder> newBuilders() {
+        final List<StringBuilder> counters = new ArrayList<StringBuilder>(2);
+        counters.add(new StringBuilder("hi"));
+        counters.add(new StringBuilder("jsync"));
         return counters;
     }
 
@@ -74,55 +74,55 @@ public class ForEachTest {
 
     @Test
     public void consumerShouldConsume() {
-        final List<Counter> counters = newCounters();
+        final List<StringBuilder> builders = newBuilders();
 
-        Jsync.forEach(counters, counterIncrementConsumer);
+        Jsync.forEach(builders, stringBuilderReverserConsumer);
 
-        assertEquals(1, counters.get(0).getCount());
-        assertEquals(2, counters.get(1).getCount());
+        assertEquals("ih", builders.get(0).toString());
+        assertEquals("cnysj", builders.get(1).toString());
     }
 
     @Test
     public void itemsArrayShouldNotBeMutated() {
-        final Counter firstCounter = new Counter(0);
-        final Counter secondCounter = new Counter(1);
+        final StringBuilder firstBuilder = new StringBuilder("hi");
+        final StringBuilder secondBuilder = new StringBuilder("jsync");
 
-        final Counter[] counters = new Counter[] { firstCounter, secondCounter };
-        final int countersLength = counters.length;
+        final StringBuilder[] builders = new StringBuilder[] { firstBuilder, secondBuilder };
+        final int buildersLength = builders.length;
 
-        Jsync.forEach(counters, counterIncrementConsumer);
+        Jsync.forEach(builders, stringBuilderReverserConsumer);
 
-        assertEquals(countersLength, counters.length);
-        assertTrue(firstCounter == counters[0]);
-        assertTrue(secondCounter == counters[1]);
+        assertEquals(buildersLength, builders.length);
+        assertTrue(firstBuilder == builders[0]);
+        assertTrue(secondBuilder == builders[1]);
     }
 
     @Test
     public void itemsCollectionShouldNotBeMutated() {
-        final Counter firstCounter = new Counter(0);
-        final Counter secondCounter = new Counter(1);
+        final StringBuilder firstBuilder = new StringBuilder(0);
+        final StringBuilder secondBuilder = new StringBuilder(1);
 
-        final List<Counter> counters = new ArrayList<Counter>(2);
-        counters.add(firstCounter);
-        counters.add(secondCounter);
+        final List<StringBuilder> builders = new ArrayList<StringBuilder>(2);
+        builders.add(firstBuilder);
+        builders.add(secondBuilder);
 
-        final int countersSize = counters.size();
+        final int countersSize = builders.size();
 
-        Jsync.forEach(counters, counterIncrementConsumer);
+        Jsync.forEach(builders, stringBuilderReverserConsumer);
 
-        assertEquals(countersSize, counters.size());
-        assertTrue(firstCounter == counters.get(0));
-        assertTrue(secondCounter == counters.get(1));
+        assertEquals(countersSize, builders.size());
+        assertTrue(firstBuilder == builders.get(0));
+        assertTrue(secondBuilder == builders.get(1));
     }
 
     @Test
     public void itemsShouldBeConsumedInParallel() {
-        final List<Counter> counters = newCounters();
+        final List<StringBuilder> builders = newBuilders();
 
         final StopWatch stopWatch = new StopWatch();
 
         stopWatch.start();
-        Jsync.forEach(counters, oneSecondSleepConsumer);
+        Jsync.forEach(builders, oneSecondSleepConsumer);
         stopWatch.stop();
 
         System.out.println("2 * oneSecondSleepConsumer consumed in " + stopWatch.getTime() + " millis");

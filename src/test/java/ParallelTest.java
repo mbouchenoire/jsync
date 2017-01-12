@@ -66,21 +66,22 @@ public final class ParallelTest {
 
     @Test
     public void errorRunnablesShouldNotInterruptWorkingRunnables() {
-        final Counter counter = new Counter(0);
+        final StringBuilder builder = new StringBuilder("hi jsync");
 
         final List<Runnable> runnables = new ArrayList<Runnable>();
 
         runnables.add(illegalArgumentRunnable);
-        runnables.add(new CounterIncremeterRunnable(counter));
+        runnables.add(new StringBuilderReverser(builder));
         runnables.add(illegalArgumentRunnable);
-        runnables.add(new CounterIncremeterRunnable(counter));
-        runnables.add(new CounterIncremeterRunnable(counter));
+        runnables.add(new StringBuilderReverser(builder));
+        runnables.add(new StringBuilderReverser(builder));
         runnables.add(illegalArgumentRunnable);
-        runnables.add(new CounterIncremeterRunnable(counter));
+        runnables.add(new StringBuilderReverser(builder));
+        runnables.add(new StringBuilderReverser(builder));
 
         final Set<ExecutionException> errors = Jsync.parallel(runnables);
 
         assertEquals(3, errors.size());
-        assertEquals(4, counter.getCount());
+        assertEquals("cnysj ih", builder.toString());
     }
 }
