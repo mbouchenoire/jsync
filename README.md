@@ -23,8 +23,8 @@ Jsync.parallel(
 ```
 
 ### `T[] map(T[] items, Function<T, R> function)`
-Produces a new `Array` / `Collection` of values by mapping each value in `items` through the `function`.
-Each execution of the `function` is called asynchronously while the `map()` function itself is synchronous.
+Produces a new `Array` / `Collection` of values by mapping each value in `items` through the [`function`](src/main/java/com/mbouchenoire/jsync/Function.java).
+Each execution of the [`function`](src/main/java/com/mbouchenoire/jsync/Function.java) is called asynchronously while the `map()` function itself is synchronous.
 
 ```java
 String[] strings = new String[] { "hi" , "Jsync" };
