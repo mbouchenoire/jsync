@@ -23,8 +23,8 @@ Jsync.parallel(
 ```
 
 ### `T[] map(T[] items, Function<T, R> function)`
-Produces a new `Array` / `Collection` of values by mapping each value in `items` through the [`function`](src/main/java/com/mbouchenoire/jsync/Function.java).
-Each execution of the [`function`](src/main/java/com/mbouchenoire/jsync/Function.java) is called asynchronously while the `map()` function itself is synchronous.
+Produces a new `Array` / `Collection` of values by mapping each value in `items` through the [`Function`](src/main/java/com/mbouchenoire/jsync/Function.java).
+Each execution of [`Function#apply()`](src/main/java/com/mbouchenoire/jsync/Function.java) is called asynchronously while the `map()` function itself is synchronous.
 
 ```java
 String[] strings = new String[] { "hi" , "Jsync" };
@@ -40,8 +40,8 @@ Integer[] lengths = Jsync.map(strings, new Function<String, Integer>() {
 ```
 
 ### `T[] filter(T[] items, Predicate<T> predicate)`
-Produces a new `Array` / `Collection` of values which pass the `Predicate` test.
-Each execution of the [`predicate`](src/main/java/com/mbouchenoire/jsync/Predicate.java) is called asynchronously while the `filter()` function itself is synchronous.
+Produces a new `Array` / `Collection` of values which pass the [`Predicate`](src/main/java/com/mbouchenoire/jsync/Predicate.java) test.
+Each execution of [`Predicate#test()`](src/main/java/com/mbouchenoire/jsync/Predicate.java) is called asynchronously while the `filter()` function itself is synchronous.
 
 ```java
 String[] strings = new String[] { "hi", "jsync", "this is too long" };
