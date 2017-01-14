@@ -39,4 +39,22 @@ Integer[] lengths = Jsync.map(strings, new Function<String, Integer>() {
 // lengths : [2, 5]
 ```
 
+### `T[] filter(T[] items, Predicate<T> predicate)`
+Produces a new `Array` / `Collection` of values which pass the `Predicate` test.
+Each execution of the [`predicate`](src/main/java/com/mbouchenoire/jsync/Predicate.java) is called asynchronously while the `filter()` function itself is synchronous.
+
+```java
+String[] strings = new String[] { "hi", "jsync", "this is too long" };
+
+String[] filteredStrings = Jsync.filter(strings, new Predicate<String>() {
+    public Boolean test(String arg) {
+        // each execution of this function is asynchronous
+        return (arg.length <= 10);
+    }
+});
+
+// filteredStrings : [ "hi", "jsync" ]
+```
+
+
 
