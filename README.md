@@ -1,4 +1,4 @@
-# Jsync
+# <img src="logo.png" alt="Drawing" style="width: 20px;"/> Jsync 
 
 ## Methods
 
