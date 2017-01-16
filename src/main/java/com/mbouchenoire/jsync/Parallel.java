@@ -42,7 +42,11 @@ class Parallel {
         final Set<Callable<Runnable>> callables = new HashSet<Callable<Runnable>>();
 
         for(Runnable runnable: commands) {
-            final RunnableCallableAdapter adapter = new RunnableCallableAdapter(runnable);
+            if (runnable == null) {
+                throw new IllegalArgumentException("null runnable");
+            }
+
+            final Callable<Runnable> adapter = Executors.callable(runnable, runnable);
             callables.add(adapter);
         }
 
