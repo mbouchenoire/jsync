@@ -21,8 +21,8 @@ public class ForEachTest {
         }
     };
 
-    private static final Consumer<StringBuilder> oneSecondSleepConsumer = new Consumer<StringBuilder>() {
-        public void accept(StringBuilder arg) {
+    private static final Consumer<StringBuffer> oneSecondSleepConsumer = new Consumer<StringBuffer>() {
+        public void accept(StringBuffer arg) {
             try {
                 Thread.sleep(1000);
                 printConsumer.accept(arg);
@@ -32,27 +32,17 @@ public class ForEachTest {
         }
     };
 
-    private static final Consumer<StringBuilder> stringBuilderReverserConsumer = new Consumer<StringBuilder>() {
-        public void accept(StringBuilder arg) {
+    private static final Consumer<StringBuffer> stringBufferReverserConsumer = new Consumer<StringBuffer>() {
+        public void accept(StringBuffer arg) {
             arg.reverse();
         }
     };
 
-    private static final Consumer<StringBuilder> stringBuilderErrorConsumer = new Consumer<StringBuilder>() {
-        public void accept(StringBuilder arg) {
-            if (arg.length() == 0) {
-                throw new IllegalArgumentException("empty string builder");
-            } else {
-                stringBuilderReverserConsumer.accept(arg);
-            }
-        }
-    };
-
-    private static final List<StringBuilder> newBuilders() {
-        final List<StringBuilder> counters = new ArrayList<StringBuilder>(2);
-        counters.add(new StringBuilder("hi"));
-        counters.add(new StringBuilder("jsync"));
-        return counters;
+    private static final List<StringBuffer> newBuilders() {
+        final List<StringBuffer> buffers = new ArrayList<StringBuffer>(2);
+        buffers.add(new StringBuffer("hi"));
+        buffers.add(new StringBuffer("jsync"));
+        return buffers;
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -74,55 +64,55 @@ public class ForEachTest {
 
     @Test
     public void consumerShouldConsume() {
-        final List<StringBuilder> builders = newBuilders();
+        final List<StringBuffer> buffers = newBuilders();
 
-        Jsync.forEach(builders, stringBuilderReverserConsumer);
+        Jsync.forEach(buffers, stringBufferReverserConsumer);
 
-        assertEquals("ih", builders.get(0).toString());
-        assertEquals("cnysj", builders.get(1).toString());
+        assertEquals("ih", buffers.get(0).toString());
+        assertEquals("cnysj", buffers.get(1).toString());
     }
 
     @Test
     public void itemsArrayShouldNotBeMutated() {
-        final StringBuilder firstBuilder = new StringBuilder("hi");
-        final StringBuilder secondBuilder = new StringBuilder("jsync");
+        final StringBuffer firstBuffer = new StringBuffer("hi");
+        final StringBuffer secondBuffer = new StringBuffer("jsync");
 
-        final StringBuilder[] builders = new StringBuilder[] { firstBuilder, secondBuilder };
-        final int buildersLength = builders.length;
+        final StringBuffer[] buffers = new StringBuffer[] { firstBuffer, secondBuffer };
+        final int buildersLength = buffers.length;
 
-        Jsync.forEach(builders, stringBuilderReverserConsumer);
+        Jsync.forEach(buffers, stringBufferReverserConsumer);
 
-        assertEquals(buildersLength, builders.length);
-        assertTrue(firstBuilder == builders[0]);
-        assertTrue(secondBuilder == builders[1]);
+        assertEquals(buildersLength, buffers.length);
+        assertTrue(firstBuffer == buffers[0]);
+        assertTrue(secondBuffer == buffers[1]);
     }
 
     @Test
     public void itemsCollectionShouldNotBeMutated() {
-        final StringBuilder firstBuilder = new StringBuilder(0);
-        final StringBuilder secondBuilder = new StringBuilder(1);
+        final StringBuffer firstBuffer = new StringBuffer(0);
+        final StringBuffer secondBuffer = new StringBuffer(1);
 
-        final List<StringBuilder> builders = new ArrayList<StringBuilder>(2);
-        builders.add(firstBuilder);
-        builders.add(secondBuilder);
+        final List<StringBuffer> buffers = new ArrayList<StringBuffer>(2);
+        buffers.add(firstBuffer);
+        buffers.add(secondBuffer);
 
-        final int countersSize = builders.size();
+        final int countersSize = buffers.size();
 
-        Jsync.forEach(builders, stringBuilderReverserConsumer);
+        Jsync.forEach(buffers, stringBufferReverserConsumer);
 
-        assertEquals(countersSize, builders.size());
-        assertTrue(firstBuilder == builders.get(0));
-        assertTrue(secondBuilder == builders.get(1));
+        assertEquals(countersSize, buffers.size());
+        assertTrue(firstBuffer == buffers.get(0));
+        assertTrue(secondBuffer == buffers.get(1));
     }
 
     @Test
     public void itemsShouldBeConsumedInParallel() {
-        final List<StringBuilder> builders = newBuilders();
+        final List<StringBuffer> buffers = newBuilders();
 
         final StopWatch stopWatch = new StopWatch();
 
         stopWatch.start();
-        Jsync.forEach(builders, oneSecondSleepConsumer);
+        Jsync.forEach(buffers, oneSecondSleepConsumer);
         stopWatch.stop();
 
         System.out.println("2 * oneSecondSleepConsumer consumed in " + stopWatch.getTime() + " millis");
