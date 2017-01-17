@@ -19,6 +19,10 @@ public final class Jsync {
     private static final ConfigurableJsync INSTANCE
             = new ConfigurableJsync(DEFAULT_TIMEOUT_SECONDS, DEFAULT_PARALLEL_EXECUTOR);
 
+    public static Set<ExecutionException> parallel(Runnable... commands) {
+        return INSTANCE.parallel(commands);
+    }
+
     public static Set<ExecutionException> parallel(Collection<Runnable> commands) {
         return INSTANCE.parallel(commands);
     }
