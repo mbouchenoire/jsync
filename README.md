@@ -35,8 +35,6 @@ Jsync.forEach(strings, new Consumer<String>() {
         System.out.println(arg);
     }
 });
-
-// filteredStrings : [ "hi", "jsync" ]
 ```
 
 ### `T[] map(T[] items, Function<T, R> function)`
