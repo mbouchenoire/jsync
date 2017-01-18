@@ -22,6 +22,23 @@ Jsync.parallel(
 );
 ```
 
+### `forEach(T[] items, Consumer<T> consumer)`
+Apply each value in `items` to the [`Consumer`](src/main/java/com/mbouchenoire/jsync/Consumer.java).
+Each execution of [`Consumer#accept()`](src/main/java/com/mbouchenoire/jsync/Consumer.java) is called asynchronously while the `forEach()` method itself is synchronous.
+
+```java
+String[] strings = new String[] { "hi", "jsync", "this is too long" };
+
+String[] filteredStrings = Jsync.filter(strings, new Predicate<String>() {
+    public Boolean test(String arg) {
+        // each execution of this function is asynchronous
+        return (arg.length <= 10);
+    }
+});
+
+// filteredStrings : [ "hi", "jsync" ]
+```
+
 ### `T[] map(T[] items, Function<T, R> function)`
 Produces a new `Array` / `Collection` of values by mapping each value in `items` through the [`Function`](src/main/java/com/mbouchenoire/jsync/Function.java).
 Each execution of [`Function#apply()`](src/main/java/com/mbouchenoire/jsync/Function.java) is called asynchronously while the `map()` function itself is synchronous.
