@@ -27,12 +27,12 @@ Apply each value in `items` to the [`Consumer`](src/main/java/com/mbouchenoire/j
 Each execution of [`Consumer#accept()`](src/main/java/com/mbouchenoire/jsync/Consumer.java) is called asynchronously while the `forEach()` method itself is synchronous.
 
 ```java
-String[] strings = new String[] { "hi", "jsync", "this is too long" };
+String[] strings = new String[] { "hi", "jsync" };
 
-String[] filteredStrings = Jsync.filter(strings, new Predicate<String>() {
-    public Boolean test(String arg) {
+Jsync.forEach(strings, new Consumer<String>() {
+    public void accept(String arg) {
         // each execution of this function is asynchronous
-        return (arg.length <= 10);
+        System.out.println(arg);
     }
 });
 
