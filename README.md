@@ -1,4 +1,5 @@
 # <img src="logo.png" alt="Drawing" style="width: 20px;"/> Jsync 
+[![Build Status](https://travis-ci.org/mbouchenoire/jsync.svg?branch=master)](https://travis-ci.org/mbouchenoire/jsync)&nbsp;
 
 ## Methods
 
