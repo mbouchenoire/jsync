@@ -15,6 +15,10 @@ public final class Jsync {
 
     private static final ConfigurableJsync INSTANCE = ConfigurableJsyncFactory.createDefault();
 
+    public static ConfigurableJsyncBuilder builder(ExecutorService executorService) {
+        return new ConfigurableJsyncBuilder(executorService);
+    }
+
     public static Set<ExecutionException> parallel(Runnable... commands) {
         return INSTANCE.parallel(commands);
     }
