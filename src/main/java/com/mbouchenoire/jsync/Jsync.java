@@ -13,11 +13,7 @@ import java.util.concurrent.Executors;
  */
 public final class Jsync {
 
-    private static final long DEFAULT_TIMEOUT_SECONDS = 60;
-    private static final ExecutorService DEFAULT_PARALLEL_EXECUTOR = Executors.newCachedThreadPool();
-
-    private static final ConfigurableJsync INSTANCE
-            = new ConfigurableJsync(DEFAULT_TIMEOUT_SECONDS, DEFAULT_PARALLEL_EXECUTOR);
+    private static final ConfigurableJsync INSTANCE = ConfigurableJsyncFactory.createDefault();
 
     public static Set<ExecutionException> parallel(Runnable... commands) {
         return INSTANCE.parallel(commands);
