@@ -6,7 +6,7 @@ import java.util.*;
 /**
  * @author mbouchenoire
  */
-class Filter {
+final class Filter {
 
     private final Mapper mapper;
 

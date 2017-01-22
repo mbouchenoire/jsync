@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author mbouchenoire
  */
-class ForEach {
+final class ForEach {
 
     private final Parallel parallel;
 

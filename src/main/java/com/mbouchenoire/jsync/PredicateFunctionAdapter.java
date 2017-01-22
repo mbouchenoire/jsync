@@ -3,7 +3,7 @@ package com.mbouchenoire.jsync;
 /**
  * @author mbouchenoire
  */
-public class PredicateFunctionAdapter<T> implements Predicate<T>, Function<T, Boolean> {
+public final class PredicateFunctionAdapter<T> implements Predicate<T>, Function<T, Boolean> {
 
     private final Predicate<T> predicate;
 

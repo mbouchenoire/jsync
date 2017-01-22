@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutorService;
 /**
  * @author mbouchenoire
  */
-public class ConfigurableJsync {
+public final class ConfigurableJsync {
 
     private final Parallel parallel;
     private final ForEach forEach;

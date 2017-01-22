@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author mbouchenoire
  */
-class Mapper {
+final class Mapper {
 
     private final Parallel parallel;
 
