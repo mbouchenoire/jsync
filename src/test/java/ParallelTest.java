@@ -79,9 +79,8 @@ public final class ParallelTest {
         runnables.add(new StringBufferReverser(buffer));
         runnables.add(new StringBufferReverser(buffer));
 
-        final Set<ExecutionException> errors = Jsync.parallel(runnables);
+        Jsync.parallel(runnables);
 
-        assertEquals(3, errors.size());
         assertEquals("cnysj ih", buffer.toString());
     }
 }

@@ -19,12 +19,12 @@ public final class Jsync {
         return new ConfigurableJsyncBuilder(executorService);
     }
 
-    public static Set<ExecutionException> parallel(Runnable... commands) {
-        return INSTANCE.parallel(commands);
+    public static void parallel(Runnable... commands) {
+        INSTANCE.parallel(commands);
     }
 
-    public static Set<ExecutionException> parallel(Collection<Runnable> commands) {
-        return INSTANCE.parallel(commands);
+    public static void parallel(Collection<Runnable> commands) {
+        INSTANCE.parallel(commands);
     }
 
     public static <T> void forEach(T[] items, Consumer<T> consumer) {

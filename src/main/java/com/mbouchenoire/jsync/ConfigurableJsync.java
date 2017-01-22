@@ -31,12 +31,12 @@ public class ConfigurableJsync {
         this.filter = new Filter(mapper);
     }
 
-    public Set<ExecutionException> parallel(Runnable... commands) {
-        return this.parallel.invoke(commands);
+    public void parallel(Runnable... commands) {
+        this.parallel.invoke(commands);
     }
 
-    public Set<ExecutionException> parallel(Collection<Runnable> commands) {
-        return this.parallel.invoke(commands);
+    public void parallel(Collection<Runnable> commands) {
+        this.parallel.invoke(commands);
     }
 
     public <T> void forEach(T[] items, Consumer<T> consumer) {
