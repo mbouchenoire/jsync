@@ -1,5 +1,6 @@
 # <img src="logo.png" alt="Drawing" style="width: 20px;"/> Jsync 
 [![Build Status](https://travis-ci.org/mbouchenoire/jsync.svg?branch=master)](https://travis-ci.org/mbouchenoire/jsync)&nbsp;
+[![Coverage Status](https://coveralls.io/repos/github/mbouchenoire/jsync/badge.svg?branch=master)](https://coveralls.io/github/mbouchenoire/jsync?branch=master)
 
 ## Methods
 
