@@ -1,9 +1,10 @@
 import com.mbouchenoire.jsync.Jsync;
+import com.mbouchenoire.jsync.Parallel;
 import org.apache.commons.lang.time.StopWatch;
 import org.junit.Test;
 
 import java.util.*;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -34,6 +35,18 @@ public final class ParallelTest {
             }
         }
     };
+
+    @Test(expected = IllegalArgumentException.class)
+    public void nullExecutorServiceShouldThrowException() {
+        new Parallel(null, 1);
+        assertTrue(false);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void invalidTimeOutShouldThrowException() {
+        new Parallel(Executors.newSingleThreadExecutor(), -1);
+        assertTrue(false);
+    }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullRunnablesArrayShouldThrowException() {

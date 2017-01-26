@@ -6,7 +6,7 @@ import java.util.concurrent.*;
 /**
  * @author mbouchenoire
  */
-class Parallel {
+public class Parallel {
 
     private final ExecutorService executorService;
     private final long timeoutSeconds;
@@ -61,7 +61,7 @@ class Parallel {
                 } catch (InterruptedException ie) {
                     throw new IllegalStateException(ie);
                 } catch (ExecutionException ee) {
-                    throw new IllegalStateException(ee);
+                    // we do nothing to avoid other runnables' interruptiion
                 } catch (TimeoutException toe) {
                     throw new IllegalStateException(toe);
                 }
