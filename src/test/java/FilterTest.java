@@ -1,3 +1,4 @@
+import com.mbouchenoire.jsync.Filter;
 import com.mbouchenoire.jsync.Jsync;
 import com.mbouchenoire.jsync.Predicate;
 import org.apache.commons.lang.time.StopWatch;
@@ -5,6 +6,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -54,6 +56,12 @@ public class FilterTest {
         Jsync.filter(strings, filterNotNullOrEmpty);
     }
 
+    @Test
+    public void emptyItemsShouldReturnEmptyItems() {
+        final Collection<String> emptyStrings = Jsync.filter(new ArrayList<String>(0), filterNotNullOrEmpty);
+        assertEquals(0, emptyStrings.size());
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void nullPredicateShouldThrowException() {
         Jsync.filter(strings, null);
@@ -93,5 +101,11 @@ public class FilterTest {
 
         System.out.println("4 * oneSecondSleepPredicate runned in " + stopWatch.getTime() + " millis");
         assertTrue(stopWatch.getTime() < 2000);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void nullMapperShouldThrowException() {
+        new Filter(null);
+        assertTrue(false);
     }
 }
