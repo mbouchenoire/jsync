@@ -38,13 +38,13 @@ public final class ParallelTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void nullExecutorServiceShouldThrowException() {
-        new Parallel(null, 1);
+        new Parallel(null, 1, null);
         assertTrue(false);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void invalidTimeOutShouldThrowException() {
-        new Parallel(Executors.newSingleThreadExecutor(), -1);
+        new Parallel(Executors.newSingleThreadExecutor(), -1, null);
         assertTrue(false);
     }
 

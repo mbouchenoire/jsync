@@ -10,8 +10,9 @@ public class Parallel {
 
     private final ExecutorService executorService;
     private final long timeoutSeconds;
+    private final ExecutionExceptionHandler executionExceptionHandler;
 
-    public Parallel(ExecutorService executorService, long timeoutSeconds) {
+    public Parallel(ExecutorService executorService, long timeoutSeconds, ExecutionExceptionHandler executionExceptionHandler) {
         super();
 
         if (executorService == null)
@@ -23,6 +24,7 @@ public class Parallel {
 
         this.executorService = executorService;
         this.timeoutSeconds = timeoutSeconds;
+        this.executionExceptionHandler = executionExceptionHandler;
     }
 
     public void invoke(Collection<Runnable> commands) {
@@ -61,7 +63,9 @@ public class Parallel {
                 } catch (InterruptedException ie) {
                     throw new IllegalStateException(ie);
                 } catch (ExecutionException ee) {
-                    // we do nothing to avoid other runnables' interruptiion
+                    if (this.executionExceptionHandler != null) {
+                        this.executionExceptionHandler.handle(ee);
+                    }
                 } catch (TimeoutException toe) {
                     throw new IllegalStateException(toe);
                 }

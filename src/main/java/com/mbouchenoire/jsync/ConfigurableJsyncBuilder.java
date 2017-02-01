@@ -9,6 +9,7 @@ public final class ConfigurableJsyncBuilder {
 
     private long timeout = 0;
     private ExecutorService executorService = null;
+    private ExecutionExceptionHandler  executionExceptionHandler = null;
 
     public ConfigurableJsyncBuilder(ExecutorService executorService) {
         super();
@@ -32,7 +33,12 @@ public final class ConfigurableJsyncBuilder {
         return this;
     }
 
+    public ConfigurableJsyncBuilder executionExceptionHandler(ExecutionExceptionHandler executionExceptionHandler) {
+        this.executionExceptionHandler = executionExceptionHandler;
+        return this;
+    }
+
     public ConfigurableJsync build() {
-        return new ConfigurableJsync(timeout, executorService);
+        return new ConfigurableJsync(timeout, executorService, this.executionExceptionHandler);
     }
 }

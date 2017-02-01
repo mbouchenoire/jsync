@@ -16,7 +16,7 @@ public final class ConfigurableJsync {
     private final Mapper mapper;
     private final Filter filter;
 
-    public ConfigurableJsync(long timeout, ExecutorService executorService) {
+    public ConfigurableJsync(long timeout, ExecutorService executorService, ExecutionExceptionHandler executionExceptionHandler) {
         super();
 
         if (timeout <= 0)
@@ -25,7 +25,7 @@ public final class ConfigurableJsync {
         if (executorService == null)
             throw new IllegalArgumentException("executorService");
 
-        this.parallel = new Parallel(executorService, timeout);
+        this.parallel = new Parallel(executorService, timeout, executionExceptionHandler);
         this.forEach = new ForEach(parallel);
         this.mapper =  new Mapper(parallel);
         this.filter = new Filter(mapper);
