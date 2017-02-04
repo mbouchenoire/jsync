@@ -16,7 +16,7 @@ public final class ConfigurableJsync {
     private final Mapper mapper;
     private final Filter filter;
 
-    public ConfigurableJsync(long timeout, ExecutorService executorService, ExecutionExceptionHandler executionExceptionHandler) {
+    public ConfigurableJsync(ExecutorService executorService, long timeout, ExecutionExceptionHandler executionExceptionHandler) {
         super();
 
         if (timeout <= 0)

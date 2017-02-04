@@ -39,6 +39,6 @@ public final class ConfigurableJsyncBuilder {
     }
 
     public ConfigurableJsync build() {
-        return new ConfigurableJsync(timeout, executorService, this.executionExceptionHandler);
+        return new ConfigurableJsync(executorService, timeout, this.executionExceptionHandler);
     }
 }
