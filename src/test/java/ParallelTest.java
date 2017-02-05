@@ -1,9 +1,9 @@
-import com.mbouchenoire.jsync.Jsync;
-import com.mbouchenoire.jsync.Parallel;
+import com.mbouchenoire.jsync.*;
 import org.apache.commons.lang.time.StopWatch;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 
 import static org.junit.Assert.assertEquals;
@@ -95,5 +95,30 @@ public final class ParallelTest {
         Jsync.parallel(runnables);
 
         assertEquals("cnysj ih", buffer.toString());
+    }
+
+    @Test
+    public void executionHandlerShouldHandle() {
+        final StringBuffer sb = new StringBuffer();
+        assertEquals(0, sb.length());
+
+        final ConfigurableJsync jsync = new ConfigurableJsyncBuilder(Executors.newSingleThreadExecutor())
+                                            .executionExceptionHandler(new ExecutionExceptionHandler() {
+                                                @Override
+                                                public void handle(ExecutionException executionException) {
+                                                    sb.append("handled");
+                                                }
+                                            })
+                                            .timeout(60)
+                                            .build();
+
+        jsync.parallel(new Runnable() {
+            @Override
+            public void run() {
+                throw new IllegalStateException("thrown to trigger ExecutionExceptionHandler");
+            }
+        });
+
+        assertTrue(sb.length() > 0);
     }
 }
