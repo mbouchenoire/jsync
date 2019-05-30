@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/mbouchenoire/jsync.svg?branch=master)](https://travis-ci.org/mbouchenoire/jsync)&nbsp;
 [![Coverage Status](https://coveralls.io/repos/github/mbouchenoire/jsync/badge.svg?branch=master)](https://coveralls.io/github/mbouchenoire/jsync?branch=master)
 
-**Jsync** is a lightweight Java library focused on providing simple methods to deal with concurrency.
+**Jsync** is a lightweight Java library focused on providing simple methods to deal with concurrency before the Java 8 Stream API.
 This library is mostly influenced by the [.NET Parallel Class](https://msdn.microsoft.com/en-us/library/system.threading.tasks.parallel(v=vs.110).aspx) and [async.js](https://github.com/caolan/async). 
 
 ## Methods
